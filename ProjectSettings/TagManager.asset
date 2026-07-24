@@ -6,6 +6,8 @@ TagManager:
   tags:
   - SlowHarm
   - InstantHarm
+  - Guano
+  - DashBump
   layers:
   - Default
   - TransparentFX
@@ -17,10 +19,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - p1
+  - p2
+  - p3
+  - p4
   - 
   - 
   - 

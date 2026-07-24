@@ -24,6 +24,16 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     GameObject playerPrefab;
+
+
+
+    public static GameManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void SpawnPlayers()
     {
         for (int i = 0; i < GameVariables.inputPlayers.Count; i++)

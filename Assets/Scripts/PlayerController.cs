@@ -6,7 +6,17 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    public GameObject sprite;
 
+    [SerializeField]
+    public GameObject dashBump;
+
+    [SerializeField]
+    public GameObject vampireProjectile;
+
+    [SerializeField]
+    public GameObject guanoProjectile;
     [SerializeField] Rigidbody2D rb;
 
     [SerializeField]
@@ -17,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public int playerID;
 
 
-    int countdown = 20;
+    int countdown = 30;
 
     private void Start()
     {
@@ -30,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine(DecrementCountdown());
 
+        gameObject.layer = playerID+10;
     }
 
     IEnumerator DecrementCountdown()
@@ -59,18 +70,20 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateCountdown(int difference)
     {
-        countdown = Mathf.Clamp(countdown + difference, 0,30);
+        countdown = Mathf.Clamp(countdown + difference, 0,60);
         countdownText.text = countdown.ToString();
     }
 
 
-    float dashSpeed = 1500;
+    float dashSpeed = 900;
+    float bumpAmount = 2000;
     public float dashCooldown = 0;
 
     public void OnDash()
     {
         if(dashCooldown <= 0)
         {
+            dashBump.SetActive(true);
             rb.AddForce(moveInput * dashSpeed, ForceMode2D.Force);
             StartCoroutine(ResetDashCooldown());
         }
@@ -82,7 +95,8 @@ public class PlayerController : MonoBehaviour
 
         while(dashCooldown > 0)
         {
-            dashCooldown-= Time.deltaTime;
+            if(dashCooldown < 0.8f) dashBump.SetActive(false);
+            dashCooldown -= Time.deltaTime;
             yield return null;
         }
         dashCooldown = 0;
@@ -95,7 +109,7 @@ public class PlayerController : MonoBehaviour
         moveInput = value.Get<Vector2>();
     }
 
-    public float moveSpeed = 1;
+    float moveSpeed = 30;
 
     bool inHarm = false;
 
@@ -103,8 +117,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.AddForce(moveInput * moveSpeed, ForceMode2D.Force);
 
-
-
+        sprite.transform.rotation = Quaternion.Euler(0, 0, moveInput.x*-40);
 
         //rb.linearVelocity = moveInput * moveSpeed;
     }
@@ -115,6 +128,10 @@ public class PlayerController : MonoBehaviour
         if(collision.tag == "SlowHarm")
         {
             inHarm = true;
+        }
+        else if(collision.tag == "DashBump")
+        {
+            rb.AddForce(collision.GetComponentInParent<PlayerController>().moveInput * bumpAmount, ForceMode2D.Force);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
