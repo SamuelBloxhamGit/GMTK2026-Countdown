@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     public GameObject dashBump;
 
     [SerializeField]
+    public GameObject bounceProjectile;
+
+    [SerializeField]
     public GameObject vampireProjectile;
 
     [SerializeField]
@@ -22,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     TMP_Text countdownText;
 
-    Vector2 moveInput;
+    public Vector2 moveInput;
 
     public int playerID;
 
@@ -113,9 +116,11 @@ public class PlayerController : MonoBehaviour
 
     bool inHarm = false;
 
+    public bool controlsActive = true;
+
     public void FixedUpdate()
     {
-        rb.AddForce(moveInput * moveSpeed, ForceMode2D.Force);
+        if(controlsActive) rb.AddForce(moveInput * moveSpeed, ForceMode2D.Force);
 
         sprite.transform.rotation = Quaternion.Euler(0, 0, moveInput.x*-40);
 
@@ -149,5 +154,7 @@ public class PlayerController : MonoBehaviour
             UpdateCountdown(-5);
         }
     }
+
+    
 
 }

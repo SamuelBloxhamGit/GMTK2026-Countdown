@@ -1,9 +1,11 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
+[Serializable]
 public class InputPlayer
 {
     public InputDevice device;
@@ -34,6 +36,12 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
+    private void DEBUGPopulatePlayers()
+    {
+        GameVariables.inputPlayers.Add(new InputPlayer(Keyboard.current, "Keyboard_WASD"));
+        GameVariables.inputPlayers.Add(new InputPlayer(Keyboard.current, "Keyboard_Arrows"));
+    }
+
     private void SpawnPlayers()
     {
         for (int i = 0; i < GameVariables.inputPlayers.Count; i++)
@@ -50,6 +58,10 @@ public class GameManager : MonoBehaviour
                 newPlayer.neverAutoSwitchControlSchemes = true;
                 // Switch to your action map name (usually "Player")
                 InputUser.PerformPairingWithDevice(GameVariables.inputPlayers[i].device, newPlayer.user);
+                if (Mouse.current != null)
+                {
+                    InputUser.PerformPairingWithDevice(Mouse.current, newPlayer.user);
+                }
                 newPlayer.SwitchCurrentActionMap(GameVariables.inputPlayers[i].actionMap);
                 newPlayer.currentActionMap.Enable();
             }
@@ -59,6 +71,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        DEBUGPopulatePlayers();
         SpawnPlayers();
     }
 

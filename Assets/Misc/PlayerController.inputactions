@@ -327,17 +327,6 @@
                 },
                 {
                     "name": "",
-                    "id": "d434db14-70d7-45d9-b274-956717b832e3",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard_Arrows",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8cbb2f4b-a784-49cc-8d5e-c010b8c7f4e6",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
@@ -354,17 +343,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Power",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "97301c98-55d6-4531-9e9e-463f58b7c6af",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard_Arrows",
                     "action": "Power",
                     "isComposite": false,
                     "isPartOfComposite": false
