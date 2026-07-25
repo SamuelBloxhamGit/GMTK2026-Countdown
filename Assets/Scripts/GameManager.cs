@@ -2,9 +2,13 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [Serializable]
 public class InputPlayer
@@ -25,10 +29,17 @@ public static class GameVariables
 
 public class GameManager : MonoBehaviour
 {
+    public List<PlayerController> alivePlayers = new List<PlayerController>();
+
+    public Color[] playerColours;
+
+    [SerializeField]
+    GameObject endingUI;
     [SerializeField]
     GameObject playerPrefab;
 
-
+    [SerializeField]
+    public Transform[] playerSpawns;
 
     public static GameManager instance;
 
@@ -89,6 +100,56 @@ public class GameManager : MonoBehaviour
     {
         DEBUGPopulatePlayers();
         SpawnPlayers();
+    }
+
+    public TMP_Text winnerText;
+    public TMP_Text topBatText;
+
+    public Button playAgain;
+    public Button back;
+
+    public void CheckAlivePlayers()
+    {
+        print(alivePlayers.Count);
+        if(alivePlayers.Count == 1)
+        {
+            StartCoroutine(EndGame());
+        }
+    }
+
+    IEnumerator EndGame()
+    {
+        alivePlayers[0].StopAllCoroutines();
+        alivePlayers[0].controlsActive = false;
+
+        yield return new WaitForSeconds(1.6f);
+        winnerText.gameObject.SetActive(false);
+        topBatText.gameObject.SetActive(false);
+        playAgain.gameObject.SetActive(false);
+        back.gameObject.SetActive(false);
+        endingUI.SetActive(true);
+
+
+        yield return new WaitForSeconds(1f);
+
+        winnerText.color = playerColours[alivePlayers[0].playerID];
+        winnerText.text = "Player " + (alivePlayers[0].playerID + 1);
+        winnerText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+
+        topBatText.gameObject.SetActive(true);
+
+
+        yield return new WaitForSeconds(2f);
+        playAgain.gameObject.SetActive(true);
+        back.gameObject.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(playAgain.gameObject);
+    }
+
+    public void ChangeScene(int scene)
+    {
+        SceneManager.LoadScene(scene);
     }
 
 }

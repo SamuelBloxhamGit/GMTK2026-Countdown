@@ -57,6 +57,10 @@ PrefabInstance:
       value: BouncePowerup Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
+      propertyPath: powerupName
+      value: Bounce Obtained!
+      objectReference: {fileID: 0}
+    - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
       propertyPath: powerUpScript
       value: 
       objectReference: {fileID: 11500000, guid: c661f8e6194cf9445a0c638b54ca4116, type: 3}

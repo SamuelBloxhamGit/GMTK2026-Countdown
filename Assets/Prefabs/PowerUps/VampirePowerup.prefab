@@ -57,6 +57,10 @@ PrefabInstance:
       value: VampirePowerup
       objectReference: {fileID: 0}
     - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
+      propertyPath: powerupName
+      value: Vampire Obtained!
+      objectReference: {fileID: 0}
+    - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
       propertyPath: powerUpScript
       value: 
       objectReference: {fileID: 11500000, guid: b25637404a1c88644a86e36c119225c2, type: 3}

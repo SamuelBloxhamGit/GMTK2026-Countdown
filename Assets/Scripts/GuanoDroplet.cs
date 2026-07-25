@@ -30,7 +30,7 @@ public class GuanoDroplet : MonoBehaviour
         player.transform.parent = transform;
         player.transform.position = transform.position;
 
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(4f);
 
 
         player.GetComponent<Rigidbody2D>().simulated = true;

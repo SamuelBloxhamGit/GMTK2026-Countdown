@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,10 +14,15 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject[] playerPortraits;
 
+
+    [SerializeField]
+    Button startButton;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        GameVariables.inputPlayers.Clear();
+        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
     }
     public bool playerWASDJoined = false;
     public bool playerArrowsJoined = false;
@@ -25,7 +32,6 @@ public class UIManager : MonoBehaviour
     {
 
         CheckKeyboardJoins();
-
         CheckGamepadJoins();
 
 
@@ -145,11 +151,21 @@ public class UIManager : MonoBehaviour
     {
         GameVariables.inputPlayers.Add(new InputPlayer(device, actionMap));
         playerPortraits[GameVariables.inputPlayers.Count -1].SetActive(true);
+
+        if(GameVariables.inputPlayers.Count > 1) beginButton.interactable = true;
     }
 
     public void BeginGame()
     {
         SceneManager.LoadScene(1);
     }
+
+    public void ChangeScene(int scene)
+    {
+        SceneManager.LoadScene(scene);
+    }
+
+    [SerializeField]
+    Button beginButton;
 
 }

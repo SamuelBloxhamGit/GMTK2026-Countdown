@@ -8,6 +8,8 @@ public class AbilityFunction : MonoBehaviour
     public void FinishPowerSetup()
     {
         projectile.layer = gameObject.layer;
+
+        gameObject.GetComponent<PlayerController>().glowEyes.SetActive(false);
         Destroy(this);
     }
 

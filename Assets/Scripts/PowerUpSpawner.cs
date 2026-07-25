@@ -15,7 +15,7 @@ public class PowerUpSpawner : MonoBehaviour
 
     IEnumerator RandomPowerSpawn()
     {
-        yield return new WaitForSeconds(Random.Range(0,45));
+        yield return new WaitForSeconds(Random.Range(0,60));
         Instantiate(powerUps[Random.Range(0,powerUps.Length)], transform.position, transform.rotation);
         StartCoroutine(RandomPowerSpawn());
     }
