@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public GameObject dashBump;
 
     [SerializeField]
+    public GameObject spitProjectile;
+    [SerializeField]
     public GameObject bounceProjectile;
 
     [SerializeField]
@@ -20,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     public GameObject guanoProjectile;
-    [SerializeField] Rigidbody2D rb;
+    [SerializeField] public Rigidbody2D rb;
 
     [SerializeField]
     TMP_Text countdownText;
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
             if(inHarm)
             {
                 UpdateCountdown(-2);
+                GameManager.instance.HitStop(0.5f);
             }
 
         }
@@ -87,7 +90,7 @@ public class PlayerController : MonoBehaviour
         if(dashCooldown <= 0)
         {
             dashBump.SetActive(true);
-            rb.AddForce(moveInput * dashSpeed, ForceMode2D.Force);
+            rb.AddForce(lastMoveInput * dashSpeed, ForceMode2D.Force);
             StartCoroutine(ResetDashCooldown());
         }
     }
@@ -118,9 +121,24 @@ public class PlayerController : MonoBehaviour
 
     public bool controlsActive = true;
 
+    public Vector2 lastMoveInput;
+    public float lastXInput = 1f;
+
     public void FixedUpdate()
     {
-        if(controlsActive) rb.AddForce(moveInput * moveSpeed, ForceMode2D.Force);
+        if (controlsActive)
+        {
+            rb.AddForce(moveInput * moveSpeed, ForceMode2D.Force);
+
+            if (moveInput.sqrMagnitude > 0)
+            {
+                lastMoveInput = moveInput.normalized;
+            }
+            if (moveInput.x != 0)
+            {
+                lastXInput = Mathf.Sign(moveInput.x);
+            }
+        }
 
         sprite.transform.rotation = Quaternion.Euler(0, 0, moveInput.x*-40);
 
@@ -136,7 +154,13 @@ public class PlayerController : MonoBehaviour
         }
         else if(collision.tag == "DashBump")
         {
-            rb.AddForce(collision.GetComponentInParent<PlayerController>().moveInput * bumpAmount, ForceMode2D.Force);
+            GameManager.instance.HitStop(0.5f);
+            rb.AddForce(collision.GetComponentInParent<PlayerController>().lastMoveInput * bumpAmount, ForceMode2D.Force);
+        }
+        else if (collision.transform.tag == "Impulse")
+        {
+            GameManager.instance.HitStop(1f);
+            rb.AddForce((collision.transform.position - transform.position).normalized * 3500, ForceMode2D.Force);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -151,6 +175,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.transform.tag == "InstantHarm")
         {
+            GameManager.instance.HitStop(1);
+
             UpdateCountdown(-5);
         }
     }
