@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1632471725927371305}
   - component: {fileID: 2193625074101177535}
   - component: {fileID: 8752920072389559512}
+  - component: {fileID: 7653006825788277832}
   m_Layer: 0
   m_Name: Bounce
   m_TagString: Untagged
@@ -142,3 +143,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DelayedDestroy
   delay: 15
+--- !u!114 &7653006825788277832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5196086356866667006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3140161ec93dec949b68a25acac91d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  impulseWave: {fileID: 5196086356866667006, guid: c1a2cac854e718041b4bf66240a56260, type: 3}

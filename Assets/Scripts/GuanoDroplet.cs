@@ -20,6 +20,7 @@ public class GuanoDroplet : MonoBehaviour
 
     IEnumerator GuanoFreeze(PlayerController player)
     {
+        GameManager.instance.HitStop(0.5f);
         stuckPlayer = true;
         gameObject.layer = 0;
 

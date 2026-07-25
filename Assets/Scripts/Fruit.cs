@@ -6,6 +6,9 @@ public class Fruit : MonoBehaviour
     [SerializeField]
     GameObject sprite;
 
+    [SerializeField]
+    Sprite[] fruitSprites;
+
     private void Start()
     {
         Invoke("DelayedShow", 0.1f);
@@ -13,7 +16,9 @@ public class Fruit : MonoBehaviour
 
     void DelayedShow()
     {
+        sprite.GetComponent<SpriteRenderer>().sprite = fruitSprites[Random.Range(0,fruitSprites.Length)];
         sprite.SetActive(true);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

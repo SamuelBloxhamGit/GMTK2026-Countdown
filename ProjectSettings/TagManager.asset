@@ -8,6 +8,7 @@ TagManager:
   - InstantHarm
   - Guano
   - DashBump
+  - Impulse
   layers:
   - Default
   - TransparentFX

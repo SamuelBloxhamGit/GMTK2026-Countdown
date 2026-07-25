@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,6 +35,21 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
+
+    Coroutine hitStop;
+
+    public void HitStop(float intensity)
+    {
+        if ((hitStop!=null)) StopCoroutine(hitStop);
+        hitStop = StartCoroutine(iHitStop(intensity));
+    }
+
+    IEnumerator iHitStop(float intensity)
+    {
+        Time.timeScale = 0.05f;
+        yield return new WaitForSeconds(intensity * 0.01f);
+        Time.timeScale = 1f;
     }
 
     private void DEBUGPopulatePlayers()
