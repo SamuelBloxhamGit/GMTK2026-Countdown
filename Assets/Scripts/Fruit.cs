@@ -5,6 +5,8 @@ public class Fruit : MonoBehaviour
 
     [SerializeField]
     GameObject sprite;
+    [SerializeField]
+    GameObject shadowSprite;
 
     [SerializeField]
     Sprite[] fruitSprites;
@@ -17,6 +19,7 @@ public class Fruit : MonoBehaviour
     void DelayedShow()
     {
         sprite.GetComponent<SpriteRenderer>().sprite = fruitSprites[Random.Range(0,fruitSprites.Length)];
+        shadowSprite.GetComponent<SpriteRenderer>().sprite = sprite.GetComponent<SpriteRenderer>().sprite;
         sprite.SetActive(true);
 
     }

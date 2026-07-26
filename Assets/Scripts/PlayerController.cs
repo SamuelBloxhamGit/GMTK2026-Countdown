@@ -7,7 +7,16 @@ using static UnityEngine.Rendering.DebugUI;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
+    public GameObject deathSprite;
+    [SerializeField]
     public GameObject sprite;
+
+
+    [SerializeField]
+    public SpriteRenderer bodySprite;
+
+    [SerializeField]
+    public Sprite[] bodyVariants;
 
     [SerializeField]
     public GameObject dashBump;
@@ -21,11 +30,16 @@ public class PlayerController : MonoBehaviour
     public GameObject vampireProjectile;
 
     [SerializeField]
+    public GameObject glowEyes;
+    [SerializeField]
     public GameObject guanoProjectile;
     [SerializeField] public Rigidbody2D rb;
 
     [SerializeField]
     TMP_Text countdownText;
+
+    [SerializeField]
+    AudioSource screech;
 
     public Vector2 moveInput;
 
@@ -46,6 +60,10 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(DecrementCountdown());
 
         gameObject.layer = playerID+10;
+
+        transform.position = GameManager.instance.playerSpawns[playerID].position;
+
+        GameManager.instance.alivePlayers.Add(this);
     }
 
     IEnumerator DecrementCountdown()
@@ -57,6 +75,15 @@ public class PlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             UpdateCountdown(-1);
+
+            countdownText.color = Color.white;
+
+            if(countdown < 6 && countdown > 0)
+            {
+                AudioManager.instance.PlaySound(2);
+                countdownText.color = Color.red;
+            }
+
 
             if(inHarm)
             {
@@ -71,24 +98,46 @@ public class PlayerController : MonoBehaviour
     
     void LoseGame()
     {
-
+        AudioManager.instance.PlaySound(3);
+        Instantiate(deathSprite, transform.position, Quaternion.identity);
+        GameManager.instance.alivePlayers.Remove(this);
+        GameManager.instance.CheckAlivePlayers();
+        Destroy(gameObject);
     }
+
+    
 
     public void UpdateCountdown(int difference)
     {
         countdown = Mathf.Clamp(countdown + difference, 0,60);
         countdownText.text = countdown.ToString();
+
+        if (countdown >= 40)
+        {
+            bodySprite.sprite = bodyVariants[2];
+        }
+        else if (countdown < 40 && countdown > 15)
+        {
+            bodySprite.sprite = bodyVariants[1];
+        }
+        else if(countdown <= 15)
+        {
+            bodySprite.sprite = bodyVariants[0];
+        }
+
+
     }
 
 
     float dashSpeed = 900;
-    float bumpAmount = 2000;
+    float bumpAmount = 1500;
     public float dashCooldown = 0;
 
     public void OnDash()
     {
         if(dashCooldown <= 0)
         {
+            screech.Play();
             dashBump.SetActive(true);
             rb.AddForce(lastMoveInput * dashSpeed, ForceMode2D.Force);
             StartCoroutine(ResetDashCooldown());
@@ -130,6 +179,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(moveInput * moveSpeed, ForceMode2D.Force);
 
+
             if (moveInput.sqrMagnitude > 0)
             {
                 lastMoveInput = moveInput.normalized;
@@ -140,6 +190,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        sprite.transform.localScale = new Vector3(lastXInput, 1, 1);
+        
         sprite.transform.rotation = Quaternion.Euler(0, 0, moveInput.x*-40);
 
         //rb.linearVelocity = moveInput * moveSpeed;
@@ -160,7 +212,7 @@ public class PlayerController : MonoBehaviour
         else if (collision.transform.tag == "Impulse")
         {
             GameManager.instance.HitStop(1f);
-            rb.AddForce((collision.transform.position - transform.position).normalized * 3500, ForceMode2D.Force);
+            rb.AddForce((collision.transform.position - transform.position).normalized * 2000, ForceMode2D.Force);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -177,7 +229,7 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.instance.HitStop(1);
 
-            UpdateCountdown(-5);
+            UpdateCountdown(-4);
         }
     }
 
