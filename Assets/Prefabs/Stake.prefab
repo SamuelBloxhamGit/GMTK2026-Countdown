@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6636478746403089199}
   - component: {fileID: 4609841398091436264}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: InstantHarm
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 49600625309704799}
   - component: {fileID: 3098532089386123355}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: InstantHarm
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8315851768866208934}
   - component: {fileID: 1996426354698022106}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stake
   m_TagString: InstantHarm
   m_Icon: {fileID: 0}

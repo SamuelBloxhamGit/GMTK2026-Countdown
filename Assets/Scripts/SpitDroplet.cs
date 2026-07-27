@@ -21,9 +21,10 @@ public class SpitDroplet : MonoBehaviour
     {
         if(collision.transform.TryGetComponent<PlayerController>(out PlayerController player))
         {
-            player.rb.AddForce(Random.insideUnitCircle.normalized * 4000, ForceMode2D.Force);
+            player.rb.AddForce(Random.insideUnitCircle.normalized * 5000, ForceMode2D.Force);
 
             GameManager.instance.HitStop(1f);
+
             Destroy(gameObject);
         }        
     }

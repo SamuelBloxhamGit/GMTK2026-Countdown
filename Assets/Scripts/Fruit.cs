@@ -32,7 +32,7 @@ public class Fruit : MonoBehaviour
             player.UpdateCountdown(5);
             Destroy(gameObject);
         }
-        else if(collision.tag == "DashBump")
+        else if(collision.tag == "DashBump" || collision.gameObject.layer > 9)
         {
 
         }

@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -17,6 +19,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     Button startButton;
+
+    [SerializeField]
+    Button resetButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -146,13 +151,78 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public TMP_Text countdownText;
+    int countdown = 20;
+
+    public void iStarterCountdown()
+    {
+        StartCoroutine(StarterCountdown());
+    }
+
+    public IEnumerator StarterCountdown()
+    {
+
+        countdownText.text = countdown.ToString();
+
+        while (countdown > 0)
+        {
+            yield return new WaitForSeconds(1);
+
+            //countdownText.color = Color.white;
+
+            //if (countdown < 3)
+            //{
+            //    AudioManager.instance.PlaySound(2);
+            //    countdownText.color = Color.red;
+            //}
+
+            countdown--;
+
+            countdownText.text = countdown.ToString();
+
+
+        }
+        countdownText.text = "";
+        countdown = 20;
+
+
+            if (GameVariables.inputPlayers.Count > 1)
+            {
+            BeginGame();
+        }
+        else
+        {
+            notEnoughPlayers.gameObject.SetActive(true);
+            iStarterCountdown();
+        }
+
+    }
+
+    [SerializeField]
+    TMP_Text notEnoughPlayers;
 
     void PlayerAdded(InputDevice device, string actionMap)
     {
         GameVariables.inputPlayers.Add(new InputPlayer(device, actionMap));
         playerPortraits[GameVariables.inputPlayers.Count -1].SetActive(true);
 
-        if(GameVariables.inputPlayers.Count > 1) beginButton.interactable = true;
+        if (GameVariables.inputPlayers.Count > 1)
+        {
+            notEnoughPlayers.gameObject.SetActive(false);
+        }
+    }
+
+    public void QuickStart()
+    {
+        if (GameVariables.inputPlayers.Count > 1)
+        {
+            BeginGame();
+        }
+    }
+
+    public void QUIT()
+    {
+        Application.Quit();
     }
 
     public void BeginGame()

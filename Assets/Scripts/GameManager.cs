@@ -32,20 +32,61 @@ public class GameManager : MonoBehaviour
     public List<PlayerController> alivePlayers = new List<PlayerController>();
 
     public Color[] playerColours;
+    public Color[] batColours;
 
     [SerializeField]
     GameObject endingUI;
     [SerializeField]
     GameObject playerPrefab;
+    [SerializeField]
+    GameObject[] levels;
 
     [SerializeField]
     public Transform[] playerSpawns;
 
     public static GameManager instance;
 
+    bool endUiOpen = false;
+    bool pauseinCooldown = false;
+
+
+    public void PauseGame()
+    {
+
+        if (pauseinCooldown)
+        {
+            return;
+        }
+        else
+        {
+            print("sdkjahdsa");
+            pauseinCooldown = true;
+
+            endingUI.SetActive(!endUiOpen);
+
+            if (endUiOpen)
+            {
+                endUiOpen = false;
+            }
+            else
+            {
+                endUiOpen = true;
+            }
+
+            Invoke("ResetPauseCool", 0.1f);
+        }
+    }
+
+    void ResetPauseCool()
+    {
+        pauseinCooldown = false;
+    }
+
     private void Awake()
     {
         instance = this;
+
+        levels[UnityEngine.Random.Range(0, levels.Length)].SetActive(true);
     }
 
     Coroutine hitStop;
@@ -59,7 +100,7 @@ public class GameManager : MonoBehaviour
     IEnumerator iHitStop(float intensity)
     {
         Time.timeScale = 0.05f;
-        yield return new WaitForSeconds(intensity * 0.01f);
+        yield return new WaitForSeconds(1 * 0.005f);
         Time.timeScale = 1f;
     }
 
@@ -96,10 +137,15 @@ public class GameManager : MonoBehaviour
     }
 
 
+
     private void Start()
     {
+#if UNITY_EDITOR
         DEBUGPopulatePlayers();
+#endif
         SpawnPlayers();
+
+
     }
 
     public TMP_Text winnerText;
@@ -122,6 +168,7 @@ public class GameManager : MonoBehaviour
         alivePlayers[0].StopAllCoroutines();
         alivePlayers[0].controlsActive = false;
 
+        StartCoroutine(AudioManager.instance.FadeSound(AudioManager.instance.battleAudioSource, false));
         yield return new WaitForSeconds(1.6f);
         winnerText.gameObject.SetActive(false);
         topBatText.gameObject.SetActive(false);
@@ -129,6 +176,7 @@ public class GameManager : MonoBehaviour
         back.gameObject.SetActive(false);
         endingUI.SetActive(true);
 
+        AudioManager.instance.PlaySound(4);
 
         yield return new WaitForSeconds(1f);
 

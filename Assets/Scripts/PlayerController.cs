@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +12,9 @@ public class PlayerController : MonoBehaviour
     public GameObject deathSprite;
     [SerializeField]
     public GameObject sprite;
+
+    [SerializeField]
+    SpriteRenderer[] allSprites;
 
 
     [SerializeField]
@@ -64,6 +69,16 @@ public class PlayerController : MonoBehaviour
         transform.position = GameManager.instance.playerSpawns[playerID].position;
 
         GameManager.instance.alivePlayers.Add(this);
+
+        foreach (SpriteRenderer sr in allSprites)
+        {
+            sr.color = GameManager.instance.batColours[playerID];
+        }
+    }
+
+    public void OnPause()
+    {
+        GameManager.instance.PauseGame();
     }
 
     IEnumerator DecrementCountdown()
@@ -84,10 +99,27 @@ public class PlayerController : MonoBehaviour
                 countdownText.color = Color.red;
             }
 
+            if(vampireAuras.Count > 0)
+            {
+                for (int i = 0; i < vampireAuras.Count; i++)
+                {
+                    
+                    for(int j = 0; j < GameManager.instance.alivePlayers.Count; j++)
+                    {
+                        if ((vampireAuras[i] - 10) == GameManager.instance.alivePlayers[j].gameObject.layer)
+                        {
+                            GameManager.instance.alivePlayers[j].UpdateCountdown(2);
+                        }
+                    }
 
-            if(inHarm)
+                }
+
+                UpdateCountdown(-1);
+            }
+            else if(inHarm)
             {
                 UpdateCountdown(-2);
+                HitFlash();
                 GameManager.instance.HitStop(0.5f);
             }
 
@@ -112,11 +144,11 @@ public class PlayerController : MonoBehaviour
         countdown = Mathf.Clamp(countdown + difference, 0,60);
         countdownText.text = countdown.ToString();
 
-        if (countdown >= 40)
+        if (countdown >= 32)
         {
             bodySprite.sprite = bodyVariants[2];
         }
-        else if (countdown < 40 && countdown > 15)
+        else if (countdown < 32 && countdown > 15)
         {
             bodySprite.sprite = bodyVariants[1];
         }
@@ -130,7 +162,7 @@ public class PlayerController : MonoBehaviour
 
 
     float dashSpeed = 900;
-    float bumpAmount = 1500;
+    float bumpAmount = 1800;
     public float dashCooldown = 0;
 
     public void OnDash()
@@ -158,6 +190,43 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    Coroutine hitFlash;
+
+
+    void HitFlash()
+    {
+        if ((hitFlash != null)) StopCoroutine(hitFlash);
+        hitFlash = StartCoroutine(iHitFlash());
+    }
+
+
+    IEnumerator iHitFlash()
+    {
+        foreach (SpriteRenderer item in allSprites)
+        {
+            item.color = Color.red;
+        }
+        yield return new WaitForSeconds(0.1f);
+
+        foreach (SpriteRenderer item in allSprites)
+        {
+            item.color = GameManager.instance.batColours[playerID];
+        }
+
+        yield return new WaitForSeconds(0.05f);
+
+        foreach (SpriteRenderer item in allSprites)
+        {
+            item.color = Color.red;
+        }
+        yield return new WaitForSeconds(0.05f);
+
+        foreach (SpriteRenderer item in allSprites)
+        {
+            item.color = GameManager.instance.batColours[playerID];
+        }
+    }
+
 
     public void OnMove(InputValue value)
     {
@@ -166,7 +235,6 @@ public class PlayerController : MonoBehaviour
 
     float moveSpeed = 30;
 
-    bool inHarm = false;
 
     public bool controlsActive = true;
 
@@ -197,29 +265,42 @@ public class PlayerController : MonoBehaviour
         //rb.linearVelocity = moveInput * moveSpeed;
     }
 
+    private int slowHarmCount = 0;
+    public bool inHarm => slowHarmCount > 0;
+
+    public List<int> vampireAuras = new List<int>();
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "SlowHarm")
+        if (collision.tag == "vamp")
         {
-            inHarm = true;
+            vampireAuras.Add(collision.gameObject.layer);
+        }
+        else if (collision.tag == "SlowHarm")
+        {
+            slowHarmCount++;
         }
         else if(collision.tag == "DashBump")
         {
-            GameManager.instance.HitStop(0.5f);
+            //GameManager.instance.HitStop(0.5f);
             rb.AddForce(collision.GetComponentInParent<PlayerController>().lastMoveInput * bumpAmount, ForceMode2D.Force);
         }
         else if (collision.transform.tag == "Impulse")
         {
             GameManager.instance.HitStop(1f);
-            rb.AddForce((collision.transform.position - transform.position).normalized * 2000, ForceMode2D.Force);
+            rb.AddForce((collision.transform.position - transform.position).normalized * 4000, ForceMode2D.Force);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "SlowHarm")
+        if (collision.tag == "vamp")
         {
-            inHarm = false;
+            vampireAuras.Remove(collision.gameObject.layer);
+        }
+        else if (collision.tag == "SlowHarm")
+        {
+            slowHarmCount = Mathf.Max(0, slowHarmCount - 1);
         }
     }
 
@@ -228,7 +309,7 @@ public class PlayerController : MonoBehaviour
         if (collision.transform.tag == "InstantHarm")
         {
             GameManager.instance.HitStop(1);
-
+            HitFlash();
             UpdateCountdown(-4);
         }
     }

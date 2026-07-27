@@ -14,7 +14,7 @@ public class BounceProjectile : MonoBehaviour
 
     IEnumerator EndBounceProjectile()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         GameObject impulseObject = Instantiate(impulseWave, transform.position, transform.rotation);
         impulseObject.layer = gameObject.layer;
         Destroy(gameObject);

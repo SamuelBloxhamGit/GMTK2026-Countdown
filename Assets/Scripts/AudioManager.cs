@@ -7,10 +7,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager instance;
 
     [SerializeField]
-    AudioSource[] audioSources;
+    public AudioSource[] audioSources;
 
     [SerializeField]
-    AudioSource battleAudioSource;
+    public AudioSource battleAudioSource;
     [SerializeField]
     AudioClip battleLoopClip;
 

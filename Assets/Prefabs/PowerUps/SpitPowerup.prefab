@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Spit
       objectReference: {fileID: 0}
+    - target: {fileID: 4001525968341562618, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 86c35976ad235894b9cd123c3d6ac973, type: 3}
     - target: {fileID: 6207322642090277953, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
       propertyPath: m_Name
       value: SpitPowerup
@@ -63,7 +67,7 @@ PrefabInstance:
     - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
       propertyPath: powerUpScript
       value: 
-      objectReference: {fileID: 11500000, guid: f9e9faf059a780042b3322c1ebdf4962, type: 3}
+      objectReference: {fileID: 3896222007623348997, guid: 45b248e2e53ee9149aef0c4792325480, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

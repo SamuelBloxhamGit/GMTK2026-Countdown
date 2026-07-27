@@ -6,11 +6,13 @@ using UnityEngine;
 public class PowerUpPickup : MonoBehaviour
 {
     [SerializeField]
-    MonoScript powerUpScript;
+    GameObject powerUpScript;
     [SerializeField]
     GameObject flashingText;
     [SerializeField]
     string powerupName;
+
+    public PowerUpSpawner spawnerReference;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -24,17 +26,22 @@ public class PowerUpPickup : MonoBehaviour
                 
             player.glowEyes.SetActive(true);
 
-            player.gameObject.AddComponent(powerUpScript.GetClass());
+            print(powerUpScript.GetComponent<AbilityFunction>().GetType());
+
+            player.gameObject.AddComponent(powerUpScript.GetComponent<AbilityFunction>().GetType());
             player.UpdateCountdown(5);
             
             GameObject flashingObject = Instantiate(flashingText, transform.position, transform.rotation);
             flashingObject.transform.GetChild(0).GetComponent<TMP_Text>().text = powerupName;
 
+            spawnerReference.powerUpSpawned = false;
+
+
             Destroy(gameObject);
         }
         else if(collision.name.Contains("Powerup"))
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
 
     }

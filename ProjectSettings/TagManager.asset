@@ -9,6 +9,7 @@ TagManager:
   - Guano
   - DashBump
   - Impulse
+  - vamp
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Harm
   - 
   - 
   - 
@@ -30,10 +31,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - p1vamp
+  - p2vamp
+  - p3vamp
+  - p4vamp
   - 
   - 
   - 
