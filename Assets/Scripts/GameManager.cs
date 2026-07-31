@@ -62,7 +62,12 @@ public class GameManager : MonoBehaviour
             print("sdkjahdsa");
             pauseinCooldown = true;
 
+
+
+
             endingUI.SetActive(!endUiOpen);
+
+
 
             if (endUiOpen)
             {
@@ -71,6 +76,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 endUiOpen = true;
+                EventSystem.current.SetSelectedGameObject(playAgain.gameObject);
             }
 
             Invoke("ResetPauseCool", 0.1f);
@@ -114,26 +120,34 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < GameVariables.inputPlayers.Count; i++)
         {
-            // 1. Instantiate the player
+            InputPlayer p = GameVariables.inputPlayers[i];
+
             PlayerInput newPlayer = PlayerInput.Instantiate(
                 playerPrefab,
-                pairWithDevice: GameVariables.inputPlayers[i].device
+                pairWithDevice: p.device
             );
 
-            // 2. FORCE activate the default action map for this new player
-            if (newPlayer != null)
-            {
-                newPlayer.neverAutoSwitchControlSchemes = true;
-                // Switch to your action map name (usually "Player")
-                InputUser.PerformPairingWithDevice(GameVariables.inputPlayers[i].device, newPlayer.user);
-                if (Mouse.current != null)
-                {
-                    InputUser.PerformPairingWithDevice(Mouse.current, newPlayer.user);
-                }
-                newPlayer.SwitchCurrentActionMap(GameVariables.inputPlayers[i].actionMap);
-                newPlayer.currentActionMap.Enable();
-            }
-        }        
+            if (newPlayer == null) continue;
+
+            newPlayer.neverAutoSwitchControlSchemes = true;
+
+            // Lock this player to the exact control scheme the lobby recorded and
+            // hand it the devices ourselves, so the shared keyboard/mouse can back
+            // more than one player. This is the step that applies the scheme's
+            // binding-GROUP mask. The old code only called SwitchCurrentActionMap,
+            // which changes the active map but NOT the mask: the first keyboard
+            // player kept the auto-selected "Keyboard_WASD" scheme (mouse was free
+            // to grab), so for an Arrows player the "Keyboard_Arrows" bindings stayed
+            // masked out and it couldn't move. Later keyboard players failed to grab
+            // the (now taken) mouse, ended up with no scheme/mask, and so worked.
+            if (p.device is Keyboard && Mouse.current != null)
+                newPlayer.SwitchCurrentControlScheme(p.actionMap, p.device, Mouse.current);
+            else
+                newPlayer.SwitchCurrentControlScheme(p.actionMap, p.device);
+
+            newPlayer.SwitchCurrentActionMap(p.actionMap);
+            newPlayer.currentActionMap.Enable();
+        }
     }
 
 
@@ -141,7 +155,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
 #if UNITY_EDITOR
-        //DEBUGPopulatePlayers();
+        DEBUGPopulatePlayers();
 #endif
         SpawnPlayers();
 

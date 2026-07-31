@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af3a2f13560a4a443a9a87c297424be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DelayedDestroy
-  delay: 0.2
+  delay: 0.5
 --- !u!1 &3111040658809416044
 GameObject:
   m_ObjectHideFlags: 0
