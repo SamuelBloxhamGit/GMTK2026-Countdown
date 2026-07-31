@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
       propertyPath: powerupName
-      value: Bounce Obtained!
+      value: Echo Bomb Obtained!
       objectReference: {fileID: 0}
     - target: {fileID: 6323146955433706562, guid: 7f2a689a1f766bb4fa97f71e5036c0bb, type: 3}
       propertyPath: powerUpScript

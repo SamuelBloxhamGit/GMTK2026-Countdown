@@ -138,16 +138,16 @@ public class UIManager : MonoBehaviour
             pairWithDevice: Keyboard.current
         );
 
-        // 2. FORCE activate the default action map for this new player
         if (newPlayer != null)
         {
-            //newPlayer.neverAutoSwitchControlSchemes = true;
-            // Switch to your action map name (usually "Player")
             InputUser.PerformPairingWithDevice(Keyboard.current, newPlayer.user);
             newPlayer.SwitchCurrentActionMap(controlScheme);
             newPlayer.currentActionMap.Enable();
 
             PlayerAdded(Keyboard.current, controlScheme);
+
+            // --- FIX: Clear UI selection so Arrow Keys control player, not UI ---
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 

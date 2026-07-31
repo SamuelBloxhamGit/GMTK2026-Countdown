@@ -29,7 +29,7 @@ public class PowerUpPickup : MonoBehaviour
             print(powerUpScript.GetComponent<AbilityFunction>().GetType());
 
             player.gameObject.AddComponent(powerUpScript.GetComponent<AbilityFunction>().GetType());
-            player.UpdateCountdown(5);
+            player.UpdateCountdown(2);
             
             GameObject flashingObject = Instantiate(flashingText, transform.position, transform.rotation);
             flashingObject.transform.GetChild(0).GetComponent<TMP_Text>().text = powerupName;

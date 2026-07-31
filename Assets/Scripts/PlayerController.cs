@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
             }
             else if(inHarm)
             {
-                UpdateCountdown(-2);
+                UpdateCountdown(-3);
                 HitFlash();
                 GameManager.instance.HitStop(0.5f);
             }

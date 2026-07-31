@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
 #if UNITY_EDITOR
-        DEBUGPopulatePlayers();
+        //DEBUGPopulatePlayers();
 #endif
         SpawnPlayers();
 
